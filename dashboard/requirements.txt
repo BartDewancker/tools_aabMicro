@@ -1,0 +1,16 @@
+###### Requirements without Version Specifiers ######
+# ipykernel
+numpy
+pandas
+# tqdm
+python-dotenv
+openpyxl
+pydantic
+sqlalchemy
+pymysql
+fastapi
+
+###### Requirements with Version Specifiers ######
+
+dash == 2.1.0
+werkzeug == 2.0.0 # downgrade werkzeug after installing dash because werkzeug 2.1.x is incompatible with dash 2.1.0

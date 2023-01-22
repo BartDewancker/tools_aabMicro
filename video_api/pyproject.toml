@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "tools_aad"
+version = "0.1.0"
+description = "Araani algorithm dashboard tools"
+authors = ["Bart Dewancker <bart.dewancker@araani.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlalchemy = "^1.4.44"
+pymysql = "^1.0.2"
+fastapi = "^0.88.0"
+strawberry-graphql = {extras = ["debug-server"], version = "^0.144.3"}
+python-dotenv = "^0.19.1"
+pymongo = {extras = ["srv"], version = "^4.3.3"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
