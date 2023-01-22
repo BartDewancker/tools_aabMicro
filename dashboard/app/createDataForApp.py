@@ -4,7 +4,7 @@ import dataUtils as utils
 import pandas as pd
 from typing import Dict
 from Run import Run
-from DataBase import DataBase
+from DataBaseOld import DataBase
 from VideoLibrary import VideoLibrary
 
 DATADIR = os.path.realpath(os.getenv("AAB_DATADIR", r"D:/aabData"))

@@ -604,7 +604,7 @@ def display_state_table_on_click_flame_bar_curve(TPRClickData, FPClickData, benc
                 raise PreventUpdate 
 
 # Import and start the database connection!
-import databaseNew as dbNew
+import database as dbNew
 dbNew.start_db()
 
 def getAllVideos():

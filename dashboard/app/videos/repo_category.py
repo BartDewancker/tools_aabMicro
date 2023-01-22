@@ -20,25 +20,7 @@ class CategoryRepository():
             traceback.print_tb(err.__traceback__)
             response.error = str(err)
             db.rollback()
-
     
-    @staticmethod
-    def get_one(response: CategoryResponse, idGet: int):
-        try:
-            db_object = db.query(CategoryTable).filter_by(id = idGet).first()
-            if db_object is not None:
-                response.message = f"Found item with id '{db_object.id}'"
-                return CategoryViewModel.from_orm(db_object)
-            else:
-                response.message = f"No item found for with id '{idGet}'"
-                return None
-            
-        except Exception as err:
-            traceback.print_tb(err.__traceback__)
-            response.error = str(err)
-            db.rollback()
-    
-
     @staticmethod
     def update(response: CategoryResponse, new_obj):
         try:
@@ -69,4 +51,3 @@ class CategoryRepository():
             traceback.print_tb(err.__traceback__)
             response.error = str(err)
             db.rollback()
-

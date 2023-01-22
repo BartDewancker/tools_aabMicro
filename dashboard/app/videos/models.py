@@ -10,9 +10,6 @@ class Video(BaseVideo):
     path: str
     category_id: int
 
-    def getPath(self):
-        return self.path
-   
     class Config:
         orm_mode = True
 

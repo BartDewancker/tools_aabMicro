@@ -5,7 +5,7 @@ from os.path import basename
 import os
 
 from CombinedMetrics import CombinedMetrics 
-from DataBase import DataBase
+from DataBaseOld import DataBase
 
 def internalName(parameter, subalgo, library):
     return f'{library.lower()}_{CombinedMetrics.columnName(parameter, subalgo)}'
