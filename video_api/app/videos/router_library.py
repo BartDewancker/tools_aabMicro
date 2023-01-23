@@ -3,20 +3,20 @@ from fastapi import status
 from fastapi import Response, status
 from typing import List
 
-from .repo_video import VideoRepository
-from .models import Video, BaseResponse, NULL_OBJ
-from viewmodels import VideoViewModel
+from .repo_library import LibraryRepository
+from .models import Library, BaseResponse, NULL_OBJ
+from viewmodels import LibraryViewModel
 
 router = APIRouter()
 
-@router.get("/", tags=["Video"], name="Get all videos",
-                      responses={status.HTTP_200_OK: {"model": List[VideoViewModel]},
+@router.get("/", tags=["Library"], name="Get all libraries",
+                      responses={status.HTTP_200_OK: {"model": List[Library]},
                                  status.HTTP_404_NOT_FOUND: {"model": str},
                                  status.HTTP_409_CONFLICT: {"model": str}})
 def get_all(response: Response):
     res = BaseResponse(message="", error="")
 
-    items = VideoRepository.get_all(res)
+    items = LibraryRepository.get_all(res)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -27,15 +27,16 @@ def get_all(response: Response):
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return res.message
-     
-@router.get("/{item_id}", tags=["Video"], name="Get a video",
-                                 responses={status.HTTP_200_OK: {"model": VideoViewModel},
+    
+
+@router.get("/{item_id}", tags=["Library"], name="Get a library",
+                                 responses={status.HTTP_200_OK: {"model": LibraryViewModel},
                                             status.HTTP_404_NOT_FOUND: {"model": str},
                                             status.HTTP_409_CONFLICT: {"model": str}})
-def get_one(idIn: int, response: Response):
+def get_one(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    item = VideoRepository.get_one(res, id=idIn)
+    item = LibraryRepository.get_one(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -46,16 +47,16 @@ def get_one(idIn: int, response: Response):
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return res.message
-    
 
-@router.post("/", tags=["Video"], name="Insert a video",
-                        responses={status.HTTP_201_CREATED: {"model": VideoViewModel},
+
+@router.post("/", tags=["Library"], name="Insert a library",
+                        responses={status.HTTP_201_CREATED: {"model": LibraryViewModel},
                                    status.HTTP_422_UNPROCESSABLE_ENTITY: {"model": str},
                                    status.HTTP_409_CONFLICT: {"model": str}})
-def insert(item: Video, response: Response):
+def insert(item: Library, response: Response):
     
     res = BaseResponse(message="", error="")
-    added_item = VideoRepository.insert(res, item)
+    added_item = LibraryRepository.insert(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -66,16 +67,16 @@ def insert(item: Video, response: Response):
     elif (added_item is not None):
         response.status_code = status.HTTP_201_CREATED
         return added_item
-   
-       
-@router.put("/", tags=["Video"], name="Update a video",
-                       responses={status.HTTP_200_OK: {"model": VideoViewModel},
+    
+
+@router.put("/", tags=["Library"], name="Update a library",
+                       responses={status.HTTP_200_OK: {"model": LibraryViewModel},
                                   status.HTTP_404_NOT_FOUND: {"model": str},
                                   status.HTTP_409_CONFLICT: {"model": str}})
-def update(item: Video, response: Response):
+def update(item: Library, response: Response):
 
     res = BaseResponse(message="", error="")
-    updated_item = VideoRepository.update(res, item)
+    updated_item = LibraryRepository.update(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -90,16 +91,15 @@ def update(item: Video, response: Response):
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return res.message
-  
-
-@router.delete("/{item_id}", tags=["Video"], name="Delete a video",
+    
+@router.delete("/{item_id}", tags=["Library"], name="Delete a library",
                                     responses={status.HTTP_200_OK: {"model": str},
                                                status.HTTP_404_NOT_FOUND: {"model": str},
                                                status.HTTP_409_CONFLICT: {"model": str}})
 def delete(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    num_rows_deleted = VideoRepository.delete(res, id)
+    num_rows_deleted = LibraryRepository.delete(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -110,4 +110,3 @@ def delete(id: int, response: Response):
     else:
         response.status_code = status.HTTP_404_NOT_FOUND
         return res.message
-    

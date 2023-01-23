@@ -2,7 +2,7 @@ from typing import Optional, List, Union
 import strawberry
 
 from .repo_video import VideoRepository
-from .models import Video, VideoResponse, NULL_OBJ
+from .models import Video, BaseResponse, NULL_OBJ
 from graphql_models import VideoInput, VideoType, VideoViewModelType, ListOfVideos, BaseMessage, VideoReturn
 
 @strawberry.type
@@ -11,7 +11,7 @@ class Query:
     @strawberry.field
     def get_all_videos(self) -> Union[ListOfVideos, BaseMessage]:
       
-        res = VideoResponse(message="", error="")
+        res = BaseResponse(message="", error="")
         videos: List[VideoType] = VideoRepository.get_all(res)
         
         if res.error != "":
@@ -23,7 +23,7 @@ class Query:
     
     @strawberry.field
     def get_one_video(self, pathIn: Optional[str] = strawberry.UNSET, idIn: Optional[int] = strawberry.UNSET) -> VideoReturn:
-        res = VideoResponse(message="", error="")
+        res = BaseResponse(message="", error="")
 
         if (pathIn is not strawberry.UNSET):
             video = VideoRepository.get_one(res, path=pathIn)
@@ -46,7 +46,7 @@ class Query:
             
     @strawberry.field
     def get_videos_by_category_id(self, id: int = strawberry.UNSET) -> Union[ListOfVideos, BaseMessage]:
-        res = VideoResponse(message="", error="")
+        res = BaseResponse(message="", error="")
 
         if (id is not strawberry.UNSET):
             videos: List[VideoType] = VideoRepository.get_many(res, category_id=id)
@@ -63,7 +63,7 @@ class Mutation:
     @strawberry.mutation
     def insert_video(self, video: VideoInput) -> VideoReturn:
    
-        res = VideoResponse(message="", error="")
+        res = BaseResponse(message="", error="")
         added_video = VideoRepository.insert(Video(res, **video.__dict__))
 
         if res.error != "":
@@ -76,7 +76,7 @@ class Mutation:
     @strawberry.mutation
     def delete_video(self, id: int = strawberry.UNSET) -> str:
    
-        res = VideoResponse(message="", error="")
+        res = BaseResponse(message="", error="")
         num_rows_deleted = VideoRepository.delete(res, id)
 
         if res.error != "":

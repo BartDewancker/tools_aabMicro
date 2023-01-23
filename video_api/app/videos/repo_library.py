@@ -1,47 +1,35 @@
 from database import db
-from viewmodels import VideoViewModel
-
-from .schemas import VideoTable
-from .models import BaseResponse, NULL_OBJ
+from viewmodels import LibraryViewModel
+from .schemas import LibraryTable
+from .models import Library, BaseResponse, NULL_OBJ
 import traceback
 
-class VideoRepository():
+class LibraryRepository():
     
     @staticmethod
     def get_all(response: BaseResponse):
         try:
-            db_objects = db.query(VideoTable).all()
+            db_objects = db.query(LibraryTable).all()
             if db_objects:
-                return list(map(lambda x: VideoViewModel.from_orm(x), db_objects))
+                return list(map(lambda x: Library.from_orm(x), db_objects))
             else:
-                response.message = f"No object of type {VideoTable} were found in the database!"
-                return None
+                response.message = f"No object of type {LibraryTable} were found in the database!"
+                return None        
         except Exception as err:
             traceback.print_tb(err.__traceback__)
             response.error = str(err)
             db.rollback()
 
+    
     @staticmethod
-    def get_one(response: BaseResponse, **kwargs):
+    def get_one(response: BaseResponse, idGet: int):
         try:
-            keyIn = ""
-            valueIn = ""
-
-            for(key, value) in kwargs.items():
-                keyIn = key
-                valueIn = value
-
-            print(f"key= {keyIn}, value= {valueIn}")
-            if(keyIn == "" or valueIn == ""):
-                response.message = "Invalid arguments."
-                return None
-            
-            db_object = db.query(VideoTable).filter_by(**kwargs).first()
+            db_object = db.query(LibraryTable).filter_by(id = idGet).first()
             if db_object is not None:
                 response.message = f"Found item with id '{db_object.id}'"
-                return VideoViewModel.from_orm(db_object)
+                return LibraryViewModel.from_orm(db_object)
             else:
-                response.message = f"No item found for {keyIn} with value '{valueIn}'"
+                response.message = f"No item found for with id '{idGet}'"
                 return None
             
         except Exception as err:
@@ -49,51 +37,26 @@ class VideoRepository():
             response.error = str(err)
             db.rollback()
 
-    @staticmethod
-    def get_many(response: BaseResponse, **kwargs):
-        try:
-            keyIn = ""
-            valueIn = ""
-
-            for(key, value) in kwargs.items():
-                keyIn = key
-                valueIn = value
-
-            if(keyIn == "" or valueIn == ""):
-                response.message = "Invalid arguments."
-                return None
-            
-            db_objects = db.query(VideoTable).filter_by(**kwargs).all()
-            if db_objects is not None:
-                response.message = f"Found items for {keyIn} with value '{valueIn}'"
-                return [VideoViewModel.from_orm(obj) for obj in db_objects]
-            else:
-                response.message = f"No items found for {keyIn} with value '{valueIn}'"
-                return None
-            
-        except Exception as err:
-            traceback.print_tb(err.__traceback__)
-            response.error = str(err)
-            db.rollback()
 
     @staticmethod
-    def insert(response: BaseResponse, new_item: VideoTable):
+    def insert(response: BaseResponse, new_item: LibraryTable):
         try:
             if new_item is None:
                 response.message = NULL_OBJ
                 return None
             else:
-                db_object = VideoTable(**new_item.dict())
+                db_object = LibraryTable(**new_item.dict())
                 db.add(db_object)
                 db.commit()
                 db.refresh(db_object)
                 response.message = "Item has been added successfully."
-                return VideoViewModel.from_orm(db_object)
+                return LibraryViewModel.from_orm(db_object)
             
         except Exception as err:
             traceback.print_tb(err.__traceback__)
             response.error = str(err)
             db.rollback()
+    
 
     @staticmethod
     def update(response: BaseResponse, new_obj):
@@ -102,7 +65,7 @@ class VideoRepository():
                 response.message = NULL_OBJ
                 return None
             else:
-                old_obj = db.query(VideoTable).filter_by(id = new_obj.id).first()
+                old_obj = db.query(LibraryTable).filter_by(id = new_obj.id).first()
 
                 if old_obj is not None:
                     
@@ -116,7 +79,7 @@ class VideoRepository():
                     response.message = result        
                     db.commit()
                     
-                    return VideoViewModel.from_orm(old_obj)
+                    return LibraryViewModel.from_orm(old_obj)
                 else:
                     response.message = f"No item found with id '{new_obj.id}'"
                     return None
@@ -129,7 +92,7 @@ class VideoRepository():
     @staticmethod
     def delete(response: BaseResponse, idDel: int):
         try:
-            num_rows_deleted = db.query(VideoTable).filter_by(id = idDel).delete()
+            num_rows_deleted = db.query(LibraryTable).filter_by(id = idDel).delete()
             if num_rows_deleted == 1:
                 response.message = f"Deleted item with id '{idDel}'"
             elif num_rows_deleted == 0:
@@ -141,3 +104,4 @@ class VideoRepository():
             traceback.print_tb(err.__traceback__)
             response.error = str(err)
             db.rollback()
+

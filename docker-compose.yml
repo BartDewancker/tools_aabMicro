@@ -53,28 +53,8 @@ services:
       - .env
     environment:
       ENVIRONMENT: DOCKER
-    
-  
-  mongodb:
-    image: mongo:6.0 # 6.0 is currently the latest version
-    restart: always
-    ports:
-        - 27017:27017
-    env_file:
-      - .env
-    volumes:
-      - mongodb:/data/db # Data storage path
-
-  mongo-express:
-    image: mongo-express:1.0.0-alpha.4
-    restart: always
-    ports:
-        - 8081:8081
-    env_file:
-      - .env
 
 volumes:
   rdb:
-  mongodb:
       
      
