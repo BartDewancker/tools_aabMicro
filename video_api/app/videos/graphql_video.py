@@ -9,72 +9,114 @@ from graphql_models import VideoInput, VideoType, VideoViewModelType, ListOfVide
 class Query:
       
     @strawberry.field
-    def get_all_videos(self) -> Union[ListOfVideos, BaseMessage]:
+    def video_get_all(self) -> Union[ListOfVideos, BaseMessage]:
       
         res = BaseResponse(message="", error="")
-        videos: List[VideoType] = VideoRepository.get_all(res)
+        items: List[VideoType] = VideoRepository.get_all(res)
         
         if res.error != "":
             return BaseMessage(message = res.error)
-        elif (videos is not None and len(videos) > 0):
-            return ListOfVideos(videos=videos)
+        elif (items is not None and len(items) > 0):
+            return ListOfVideos(videos=items)
         else:
             return BaseMessage(message = res.message)
     
     @strawberry.field
-    def get_one_video(self, pathIn: Optional[str] = strawberry.UNSET, idIn: Optional[int] = strawberry.UNSET) -> VideoReturn:
+    def video_get_one(self, path: Optional[str] = strawberry.UNSET, id: Optional[int] = strawberry.UNSET) -> VideoReturn:
         res = BaseResponse(message="", error="")
 
-        if (pathIn is not strawberry.UNSET):
-            video = VideoRepository.get_one(res, path=pathIn)
+        if (path is not strawberry.UNSET):
+            item = VideoRepository.get_one(res, path=path)
             if res.error != "":
                 return BaseMessage(message = res.error)
-            elif (video is not None):
+            elif (item is not None):
                 print(res.message)
-                return video
+                return item
             else:
                 return BaseMessage(message = res.message)
-        elif (idIn is not strawberry.UNSET):
-            video = VideoRepository.get_one(res, id=idIn)
+        elif (id is not strawberry.UNSET):
+            item = VideoRepository.get_one(res, id=id)
             if res.error != "":
                 return BaseMessage(message = res.error)
-            elif (video is not None):
+            elif (item is not None):
                 print(res.message)
-                return video
+                return item
             else:
                 return BaseMessage(message = res.message)
             
     @strawberry.field
-    def get_videos_by_category_id(self, id: int = strawberry.UNSET) -> Union[ListOfVideos, BaseMessage]:
+    def video_get_by_category_id(self, id: int = strawberry.UNSET) -> Union[ListOfVideos, BaseMessage]:
         res = BaseResponse(message="", error="")
 
         if (id is not strawberry.UNSET):
-            videos: List[VideoType] = VideoRepository.get_many(res, category_id=id)
+            items: List[VideoType] = VideoRepository.get_many(res, category_id=id)
             if res.error != "":
                 return BaseMessage(message = res.error)
-            elif (videos is not None):
+            elif (items is not None):
                 print(res.message)
-                return ListOfVideos(videos=videos)
+                return ListOfVideos(videos=items)
             else:
                 return BaseMessage(message = res.message)
      
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    def insert_video(self, video: VideoInput) -> VideoReturn:
+    def video_insert(self, item: VideoInput) -> VideoReturn:
    
         res = BaseResponse(message="", error="")
-        added_video = VideoRepository.insert(Video(res, **video.__dict__))
+        added_item = VideoRepository.insert(res, Video(**item.__dict__))
 
         if res.error != "":
             return BaseMessage(message = res.error)
         elif(res.message == NULL_OBJ):
             return BaseMessage(message = res.message)
-        elif (added_video is not None):
-            return added_video
+        elif (added_item is not None):
+            return added_item
         
     @strawberry.mutation
-    def delete_video(self, id: int = strawberry.UNSET) -> str:
+    def video_update(self, item: VideoInput) -> VideoReturn:
+   
+        res = BaseResponse(message="", error="")
+        updated_item = VideoRepository.update(res, Video(**item.__dict__))
+
+        if res.error != "":
+            return  BaseMessage(message = res.error)
+        elif (res.message == NULL_OBJ):
+            return BaseMessage(message = res.message)
+        elif (updated_item is not None):
+            print(res.message)
+            return updated_item
+        else:
+            return BaseMessage(message = res.message)
+        
+    @strawberry.mutation
+    def video_updatePath(self, id: int, path: str) -> VideoReturn:
+   
+        res = BaseResponse(message="", error="")
+        updated_item = VideoRepository.updatePath(res, id, path)
+
+        if res.error != "":
+            return  BaseMessage(message = res.error)
+        elif (updated_item is not None):
+            return updated_item
+        else:
+            return BaseMessage(message = res.message)
+        
+    @strawberry.mutation
+    def video_updateAnnotation(self, id: int, annotation: str) -> VideoReturn:
+   
+        res = BaseResponse(message="", error="")
+        updated_item = VideoRepository.updateAnnotation(res, id, annotation)
+
+        if res.error != "":
+            return  BaseMessage(message = res.error)
+        elif (updated_item is not None):
+            return updated_item
+        else:
+            return BaseMessage(message = res.message)
+        
+    @strawberry.mutation
+    def video_delete(self, id: int = strawberry.UNSET) -> str:
    
         res = BaseResponse(message="", error="")
         num_rows_deleted = VideoRepository.delete(res, id)

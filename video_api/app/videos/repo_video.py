@@ -86,7 +86,7 @@ class VideoRepository():
                 db_object = VideoTable(**new_item.dict())
                 db.add(db_object)
                 db.commit()
-                db.refresh(db_object)
+                #db.refresh(db_object)
                 response.message = "Item has been added successfully."
                 return VideoViewModel.from_orm(db_object)
             
@@ -115,7 +115,6 @@ class VideoRepository():
 
                     response.message = result        
                     db.commit()
-                    
                     return VideoViewModel.from_orm(old_obj)
                 else:
                     response.message = f"No item found with id '{new_obj.id}'"
@@ -125,6 +124,46 @@ class VideoRepository():
             traceback.print_tb(err.__traceback__)
             response.error = str(err)
             db.rollback()
+
+    
+    @staticmethod
+    def updatePath(response: BaseResponse, id: int, new_path: str):
+        try:
+            item = db.query(VideoTable).filter_by(id = id).first()
+
+            if item is not None:  
+                setattr(item, "path", new_path)
+                db.commit()
+                return VideoViewModel.from_orm(item)
+            else:
+                response.message = f"No item found with id '{id}'"
+                return None
+
+        except Exception as err:
+            traceback.print_tb(err.__traceback__)
+            response.error = str(err)
+            db.rollback()
+
+
+    @staticmethod
+    def updateAnnotation(response: BaseResponse, id: int, new_annotation: str):
+        try:
+            item = db.query(VideoTable).filter_by(id = id).first()
+
+            if item is not None:  
+                setattr(item, "annotation", new_annotation)
+                db.commit()
+                
+                return VideoViewModel.from_orm(item)
+            else:
+                response.message = f"No item found with id '{id}'"
+                return None
+
+        except Exception as err:
+            traceback.print_tb(err.__traceback__)
+            response.error = str(err)
+            db.rollback()
+
 
     @staticmethod
     def delete(response: BaseResponse, idDel: int):
