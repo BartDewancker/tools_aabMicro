@@ -8,6 +8,7 @@ from .models import Library, BaseResponse, NULL_OBJ
 from viewmodels import LibraryViewModel
 
 router = APIRouter()
+repo = LibraryRepository
 
 @router.get("/", tags=["Library"], name="Get all libraries",
                       responses={status.HTTP_200_OK: {"model": List[Library]},
@@ -15,8 +16,7 @@ router = APIRouter()
                                  status.HTTP_409_CONFLICT: {"model": str}})
 def get_all(response: Response):
     res = BaseResponse(message="", error="")
-
-    items = LibraryRepository.get_all(res)
+    items = repo.get_all(res)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -36,7 +36,7 @@ def get_all(response: Response):
 def get_one(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    item = LibraryRepository.get_one(res, id)
+    item = repo.get_one(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -56,7 +56,7 @@ def get_one(id: int, response: Response):
 def insert(item: Library, response: Response):
     
     res = BaseResponse(message="", error="")
-    added_item = LibraryRepository.insert(res, item)
+    added_item = repo.insert(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -76,7 +76,7 @@ def insert(item: Library, response: Response):
 def update(item: Library, response: Response):
 
     res = BaseResponse(message="", error="")
-    updated_item = LibraryRepository.update(res, item)
+    updated_item = repo.update(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -99,7 +99,7 @@ def update(item: Library, response: Response):
 def delete(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    num_rows_deleted = LibraryRepository.delete(res, id)
+    num_rows_deleted = repo.delete(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT

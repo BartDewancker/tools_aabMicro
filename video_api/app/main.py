@@ -5,19 +5,20 @@ from strawberry.fastapi import GraphQLRouter
 from videos.router_video import router as router_video
 from videos.router_category import router as router_category
 from videos.router_library import router as router_library
-from videos.graphql_video import Query as VideosQuery, Mutation as VideosMutation
-from videos.graphql_category import Query as CategoriesQuery, Mutation as CategoriesMutation
+from videos.graphql_video import Query as VideoQuery, Mutation as VideoMutation
+from videos.graphql_category import Query as CategoryQuery, Mutation as CategoryMutation
+from videos.graphql_library import Query as LibraryQuery, Mutation as LibraryMutation
 
 # Import and start the database connection!
 import database as db
 db.start_db()
 
 @strawberry.type
-class Query(VideosQuery, CategoriesQuery):
+class Query(VideoQuery, CategoryQuery, LibraryQuery):
     pass
 
 @strawberry.type
-class Mutation(VideosMutation, CategoriesMutation):
+class Mutation(VideoMutation, CategoryMutation, LibraryMutation):
     pass
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)

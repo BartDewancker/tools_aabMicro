@@ -8,6 +8,7 @@ from .models import Video, BaseResponse, NULL_OBJ
 from viewmodels import VideoViewModel
 
 router = APIRouter()
+repo = VideoRepository
 
 @router.get("/", tags=["Video"], name="Get all videos",
                       responses={status.HTTP_200_OK: {"model": List[VideoViewModel]},
@@ -16,7 +17,7 @@ router = APIRouter()
 def get_all(response: Response):
     res = BaseResponse(message="", error="")
 
-    items = VideoRepository.get_all(res)
+    items = repo.get_all(res)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -35,7 +36,7 @@ def get_all(response: Response):
 def get_one(idIn: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    item = VideoRepository.get_one(res, id=idIn)
+    item = repo.get_one(res, id=idIn)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -55,7 +56,7 @@ def get_one(idIn: int, response: Response):
 def insert(item: Video, response: Response):
     
     res = BaseResponse(message="", error="")
-    added_item = VideoRepository.insert(res, item)
+    added_item = repo.insert(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -75,7 +76,7 @@ def insert(item: Video, response: Response):
 def update(item: Video, response: Response):
 
     res = BaseResponse(message="", error="")
-    updated_item = VideoRepository.update(res, item)
+    updated_item = repo.update(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -99,7 +100,7 @@ def update(item: Video, response: Response):
 def delete(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    num_rows_deleted = VideoRepository.delete(res, id)
+    num_rows_deleted = repo.delete(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT

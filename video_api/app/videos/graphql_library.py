@@ -1,20 +1,20 @@
 from typing import Optional, List, Union
 import strawberry
 
-from .repo_category import CategoryRepository
-from .models import Category, BaseResponse, NULL_OBJ
-from graphql_models import CategoryInput, CategoryType, ListOfCategories, BaseMessage, CategoryReturn
+from .repo_library import LibraryRepository
+from .models import Library, BaseResponse, NULL_OBJ
+from graphql_models import LibraryInput, LibraryType, ListOfCategories, BaseMessage, LibraryReturn
 
-repo = CategoryRepository
+repo = LibraryRepository
 
 @strawberry.type
 class Query:
       
     @strawberry.field
-    def category_get_all(self) -> Union[ListOfCategories, BaseMessage]:
+    def library_get_all(self) -> Union[ListOfCategories, BaseMessage]:
       
         res = BaseResponse(message="", error="")
-        items: List[CategoryType] = repo.get_all(res)
+        items: List[LibraryType] = repo.get_all(res)
         
         if res.error != "":
             return BaseMessage(message = res.error)
@@ -24,7 +24,7 @@ class Query:
             return BaseMessage(message = res.message)
     
     @strawberry.field
-    def category_get_one(self, id: int = strawberry.UNSET) -> CategoryReturn:
+    def library_get_one(self, id: int = strawberry.UNSET) -> LibraryReturn:
         res = BaseResponse(message="", error="")
 
         if (id is not strawberry.UNSET):
@@ -41,10 +41,10 @@ class Query:
 class Mutation:
     
     @strawberry.mutation
-    def category_insert(self, item: CategoryInput) -> CategoryReturn:
+    def library_insert(self, item: LibraryInput) -> LibraryReturn:
    
         res = BaseResponse(message="", error="")
-        added_item = repo.insert(res, Category(**item.__dict__))
+        added_item = repo.insert(res, Library(**item.__dict__))
 
         if res.error != "":
             return BaseMessage(message = res.error)
@@ -54,10 +54,10 @@ class Mutation:
             return added_item
         
     @strawberry.mutation
-    def category_update(self, item: CategoryInput) -> CategoryReturn:
+    def library_update(self, item: LibraryInput) -> LibraryReturn:
    
         res = BaseResponse(message="", error="")
-        updated_item = repo.update(res, Category(**item.__dict__))
+        updated_item = repo.update(res, Library(**item.__dict__))
 
         if res.error != "":
             return  BaseMessage(message = res.error)
@@ -71,7 +71,7 @@ class Mutation:
         
     
     @strawberry.mutation
-    def category_delete(self, id: int = strawberry.UNSET) -> str:
+    def library_delete(self, id: int = strawberry.UNSET) -> str:
    
         res = BaseResponse(message="", error="")
         num_rows_deleted = repo.delete(res, id)

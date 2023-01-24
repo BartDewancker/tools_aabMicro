@@ -5,6 +5,8 @@ from .repo_video import VideoRepository
 from .models import Video, BaseResponse, NULL_OBJ
 from graphql_models import VideoInput, VideoType, VideoViewModelType, ListOfVideos, BaseMessage, VideoReturn
 
+repo = VideoRepository
+
 @strawberry.type
 class Query:
       
@@ -12,7 +14,7 @@ class Query:
     def video_get_all(self) -> Union[ListOfVideos, BaseMessage]:
       
         res = BaseResponse(message="", error="")
-        items: List[VideoType] = VideoRepository.get_all(res)
+        items: List[VideoType] = repo.get_all(res)
         
         if res.error != "":
             return BaseMessage(message = res.error)
@@ -26,7 +28,7 @@ class Query:
         res = BaseResponse(message="", error="")
 
         if (path is not strawberry.UNSET):
-            item = VideoRepository.get_one(res, path=path)
+            item = repo.get_one(res, path=path)
             if res.error != "":
                 return BaseMessage(message = res.error)
             elif (item is not None):
@@ -35,7 +37,7 @@ class Query:
             else:
                 return BaseMessage(message = res.message)
         elif (id is not strawberry.UNSET):
-            item = VideoRepository.get_one(res, id=id)
+            item = repo.get_one(res, id=id)
             if res.error != "":
                 return BaseMessage(message = res.error)
             elif (item is not None):
@@ -49,7 +51,7 @@ class Query:
         res = BaseResponse(message="", error="")
 
         if (id is not strawberry.UNSET):
-            items: List[VideoType] = VideoRepository.get_many(res, category_id=id)
+            items: List[VideoType] = repo.get_many(res, category_id=id)
             if res.error != "":
                 return BaseMessage(message = res.error)
             elif (items is not None):
@@ -64,7 +66,7 @@ class Mutation:
     def video_insert(self, item: VideoInput) -> VideoReturn:
    
         res = BaseResponse(message="", error="")
-        added_item = VideoRepository.insert(res, Video(**item.__dict__))
+        added_item = repo.insert(res, Video(**item.__dict__))
 
         if res.error != "":
             return BaseMessage(message = res.error)
@@ -77,7 +79,7 @@ class Mutation:
     def video_update(self, item: VideoInput) -> VideoReturn:
    
         res = BaseResponse(message="", error="")
-        updated_item = VideoRepository.update(res, Video(**item.__dict__))
+        updated_item = repo.update(res, Video(**item.__dict__))
 
         if res.error != "":
             return  BaseMessage(message = res.error)
@@ -93,7 +95,7 @@ class Mutation:
     def video_updatePath(self, id: int, path: str) -> VideoReturn:
    
         res = BaseResponse(message="", error="")
-        updated_item = VideoRepository.updatePath(res, id, path)
+        updated_item = repo.updatePath(res, id, path)
 
         if res.error != "":
             return  BaseMessage(message = res.error)
@@ -106,7 +108,7 @@ class Mutation:
     def video_updateAnnotation(self, id: int, annotation: str) -> VideoReturn:
    
         res = BaseResponse(message="", error="")
-        updated_item = VideoRepository.updateAnnotation(res, id, annotation)
+        updated_item = repo.updateAnnotation(res, id, annotation)
 
         if res.error != "":
             return  BaseMessage(message = res.error)
@@ -119,7 +121,7 @@ class Mutation:
     def video_delete(self, id: int = strawberry.UNSET) -> str:
    
         res = BaseResponse(message="", error="")
-        num_rows_deleted = VideoRepository.delete(res, id)
+        num_rows_deleted = repo.delete(res, id)
 
         if res.error != "":
             return res.error

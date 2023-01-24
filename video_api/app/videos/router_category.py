@@ -8,6 +8,7 @@ from .models import Category, BaseResponse, NULL_OBJ
 from viewmodels import CategoryViewModel
 
 router = APIRouter()
+repo = CategoryRepository
 
 @router.get("/", tags=["Category"], name="Get all categories",
                       responses={status.HTTP_200_OK: {"model": List[Category]},
@@ -16,7 +17,7 @@ router = APIRouter()
 def get_all(response: Response):
     res = BaseResponse(message="", error="")
 
-    items = CategoryRepository.get_all(res)
+    items = repo.get_all(res)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -36,7 +37,7 @@ def get_all(response: Response):
 def get_one(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    item = CategoryRepository.get_one(res, id)
+    item = repo.get_one(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -56,7 +57,7 @@ def get_one(id: int, response: Response):
 def insert(item: Category, response: Response):
     
     res = BaseResponse(message="", error="")
-    added_item = CategoryRepository.insert(res, item)
+    added_item = repo.insert(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -76,7 +77,7 @@ def insert(item: Category, response: Response):
 def update(item: Category, response: Response):
 
     res = BaseResponse(message="", error="")
-    updated_item = CategoryRepository.update(res, item)
+    updated_item = repo.update(res, item)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -99,7 +100,7 @@ def update(item: Category, response: Response):
 def delete(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    num_rows_deleted = CategoryRepository.delete(res, id)
+    num_rows_deleted = repo.delete(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
