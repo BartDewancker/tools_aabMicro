@@ -3,7 +3,8 @@ from fastapi import status
 from fastapi import Response, status
 from typing import List
 
-from .repo_library import LibraryRepository
+from .mdb_repo_library import LibraryRepository
+#from .repo_library import LibraryRepository
 from .models import Library, BaseResponse, NULL_OBJ
 from viewmodels import LibraryViewModel
 
@@ -11,7 +12,7 @@ router = APIRouter()
 repo = LibraryRepository
 
 @router.get("/", tags=["Library"], name="Get all libraries",
-                      responses={status.HTTP_200_OK: {"model": List[Library]},
+                      responses={status.HTTP_200_OK: {"model": List[LibraryViewModel]},
                                  status.HTTP_404_NOT_FOUND: {"model": str},
                                  status.HTTP_409_CONFLICT: {"model": str}})
 def get_all(response: Response):

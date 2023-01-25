@@ -4,6 +4,7 @@ from fastapi import Response, status
 from typing import List
 
 from .repo_video import VideoRepository
+#from .mdb_repo_video import VideoRepository
 from .models import Video, BaseResponse, NULL_OBJ
 from viewmodels import VideoViewModel
 
@@ -33,10 +34,10 @@ def get_all(response: Response):
                                  responses={status.HTTP_200_OK: {"model": VideoViewModel},
                                             status.HTTP_404_NOT_FOUND: {"model": str},
                                             status.HTTP_409_CONFLICT: {"model": str}})
-def get_one(idIn: int, response: Response):
+def get_one(id: int, response: Response):
    
     res = BaseResponse(message="", error="")
-    item = repo.get_one(res, id=idIn)
+    item = repo.get_one(res, id)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT
@@ -77,6 +78,29 @@ def update(item: Video, response: Response):
 
     res = BaseResponse(message="", error="")
     updated_item = repo.update(res, item)
+
+    if res.error != "":
+        response.status_code = status.HTTP_409_CONFLICT
+        return res.error
+    elif (res.message == NULL_OBJ):
+        response.status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+        return res.message
+    elif (updated_item is not None):
+        response.status_code = status.HTTP_200_OK
+        print(res.message)
+        return updated_item
+    else:
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return res.message
+    
+@router.put("/{item_id},{item_path}", tags=["Video"], name="Update a video path",
+                       responses={status.HTTP_200_OK: {"model": VideoViewModel},
+                                  status.HTTP_404_NOT_FOUND: {"model": str},
+                                  status.HTTP_409_CONFLICT: {"model": str}})
+def update_path(id: int, path: str, response: Response):
+
+    res = BaseResponse(message="", error="")
+    updated_item = repo.updatePath(res, id, path)
 
     if res.error != "":
         response.status_code = status.HTTP_409_CONFLICT

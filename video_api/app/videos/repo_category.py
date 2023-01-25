@@ -40,7 +40,7 @@ class CategoryRepository():
 
 
     @staticmethod
-    def insert(response: BaseResponse, new_item: CategoryTable):
+    def insert(response: BaseResponse, new_item: Category):
         try:
             if new_item is None:
                 response.message = NULL_OBJ
@@ -60,7 +60,7 @@ class CategoryRepository():
     
 
     @staticmethod
-    def update(response: BaseResponse, new_obj):
+    def update(response: BaseResponse, new_obj: Category):
         try:
             if new_obj is None:
                 response.message = NULL_OBJ

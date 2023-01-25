@@ -2,7 +2,7 @@ from database import db
 from viewmodels import VideoViewModel
 
 from .schemas import VideoTable
-from .models import BaseResponse, NULL_OBJ
+from .models import Video, BaseResponse, NULL_OBJ
 import traceback
 
 class VideoRepository():
@@ -77,7 +77,7 @@ class VideoRepository():
             db.rollback()
 
     @staticmethod
-    def insert(response: BaseResponse, new_item: VideoTable):
+    def insert(response: BaseResponse, new_item: Video):
         try:
             if new_item is None:
                 response.message = NULL_OBJ
@@ -96,7 +96,7 @@ class VideoRepository():
             db.rollback()
 
     @staticmethod
-    def update(response: BaseResponse, new_obj):
+    def update(response: BaseResponse, new_obj: Video):
         try:
             if new_obj is None:
                 response.message = NULL_OBJ

@@ -39,7 +39,7 @@ class LibraryRepository():
 
 
     @staticmethod
-    def insert(response: BaseResponse, new_item: LibraryTable):
+    def insert(response: BaseResponse, new_item: Library):
         try:
             if new_item is None:
                 response.message = NULL_OBJ
@@ -59,7 +59,7 @@ class LibraryRepository():
     
 
     @staticmethod
-    def update(response: BaseResponse, new_obj):
+    def update(response: BaseResponse, new_obj: Library):
         try:
             if new_obj is None:
                 response.message = NULL_OBJ
