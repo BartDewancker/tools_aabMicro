@@ -3,8 +3,13 @@ from fastapi import status
 from fastapi import Response, status
 from typing import List
 
-#from .mdb_repo_category import CategoryRepository
-from .mdb_repo_category import CategoryRepository
+from nosql_database import MONGO_DATABASE_ON
+
+if MONGO_DATABASE_ON == "ON":
+    from .mdb_repo_category import CategoryRepository
+else:
+    from .repo_category import CategoryRepository
+
 from .models import Category, BaseResponse, NULL_OBJ
 from viewmodels import CategoryViewModel
 

@@ -1,7 +1,13 @@
 from typing import Optional, List, Union
 import strawberry
 
-from .repo_video import VideoRepository
+from nosql_database import MONGO_DATABASE_ON
+
+if MONGO_DATABASE_ON == "ON":
+    from .mdb_repo_video import VideoRepository
+else:
+    from .repo_video import VideoRepository
+
 from .models import Video, BaseResponse, NULL_OBJ
 from graphql_models import VideoInput, VideoType, VideoViewModelType, ListOfVideos, BaseMessage, VideoReturn
 
@@ -27,7 +33,7 @@ class Query:
     def video_get_one(self, path: Optional[str] = strawberry.UNSET, id: Optional[int] = strawberry.UNSET) -> VideoReturn:
         res = BaseResponse(message="", error="")
 
-        if (path is not strawberry.UNSET):
+        if (path is not strawberry.UNSET and path != ""):
             item = repo.get_one(res, path=path)
             if res.error != "":
                 return BaseMessage(message = res.error)

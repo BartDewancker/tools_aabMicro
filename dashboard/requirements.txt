@@ -9,6 +9,7 @@ pydantic
 sqlalchemy
 pymysql
 fastapi
+pymongo
 
 ###### Requirements with Version Specifiers ######
 

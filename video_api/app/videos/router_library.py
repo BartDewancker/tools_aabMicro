@@ -3,8 +3,13 @@ from fastapi import status
 from fastapi import Response, status
 from typing import List
 
-from .mdb_repo_library import LibraryRepository
-#from .repo_library import LibraryRepository
+from nosql_database import MONGO_DATABASE_ON
+
+if MONGO_DATABASE_ON == "ON":
+    from .mdb_repo_library import LibraryRepository
+else:
+    from .repo_library import LibraryRepository
+
 from .models import Library, BaseResponse, NULL_OBJ
 from viewmodels import LibraryViewModel
 

@@ -3,6 +3,7 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 
 from videos.router_video import router as router_video
+from videos.router_video import router2 as router_video2
 from videos.router_category import router as router_category
 from videos.router_library import router as router_library
 from videos.graphql_video import Query as VideoQuery, Mutation as VideoMutation
@@ -30,7 +31,8 @@ app = FastAPI(
     version="0.0.1",
 )
 
-app.include_router(router_video, prefix="/videos")
+app.include_router(router_video, prefix="/videos_1")
+app.include_router(router_video2, prefix="/videos_2")
 app.include_router(router_category, prefix="/categories")
 app.include_router(router_library, prefix="/libraries")
 app.include_router(graphql_app, prefix="/graphql")

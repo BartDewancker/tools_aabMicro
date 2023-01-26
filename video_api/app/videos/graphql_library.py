@@ -1,9 +1,15 @@
 from typing import Optional, List, Union
 import strawberry
 
-from .repo_library import LibraryRepository
+from nosql_database import MONGO_DATABASE_ON
+
+if MONGO_DATABASE_ON == "ON":
+    from .mdb_repo_library import LibraryRepository
+else:
+    from .repo_library import LibraryRepository
+
 from .models import Library, BaseResponse, NULL_OBJ
-from graphql_models import LibraryInput, LibraryType, ListOfCategories, BaseMessage, LibraryReturn
+from graphql_models import LibraryInput, LibraryType, ListOfLibraries, BaseMessage, LibraryReturn
 
 repo = LibraryRepository
 
@@ -11,7 +17,7 @@ repo = LibraryRepository
 class Query:
       
     @strawberry.field
-    def library_get_all(self) -> Union[ListOfCategories, BaseMessage]:
+    def library_get_all(self) -> Union[ListOfLibraries, BaseMessage]:
       
         res = BaseResponse(message="", error="")
         items: List[LibraryType] = repo.get_all(res)
@@ -19,7 +25,7 @@ class Query:
         if res.error != "":
             return BaseMessage(message = res.error)
         elif (items is not None and len(items) > 0):
-            return ListOfCategories(videos=items)
+            return ListOfLibraries(libraries=items)
         else:
             return BaseMessage(message = res.message)
     

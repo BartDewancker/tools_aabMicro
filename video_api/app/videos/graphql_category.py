@@ -1,7 +1,13 @@
 from typing import Optional, List, Union
 import strawberry
 
-from .repo_category import CategoryRepository
+from nosql_database import MONGO_DATABASE_ON
+
+if MONGO_DATABASE_ON == "ON":
+    from .mdb_repo_category import CategoryRepository
+else:
+    from .repo_category import CategoryRepository
+
 from .models import Category, BaseResponse, NULL_OBJ
 from graphql_models import CategoryInput, CategoryType, ListOfCategories, BaseMessage, CategoryReturn
 
@@ -19,7 +25,7 @@ class Query:
         if res.error != "":
             return BaseMessage(message = res.error)
         elif (items is not None and len(items) > 0):
-            return ListOfCategories(videos=items)
+            return ListOfCategories(categories=items)
         else:
             return BaseMessage(message = res.message)
     
