@@ -1,5 +1,4 @@
-In map D:\GitHub\AIatHome
-poetry new study
+# poetry
 
 pyproject.toml aanvullen met de nodige packages
     --> poetry install
@@ -28,9 +27,15 @@ resultaat te zien in de map C:\Users\BartDewancker\AppData\Local\pypoetry\Cache\
 verwijderen van een package, bv typings
     --> poetry run pip uninstall typings
 
-Starten vanuit docker compose
-Stoppen van de lopende python main.py script en starten van de container
-    --> docker compose up -d --build
+# docker compose
+Starten services:
+    --> docker-compose up -d --build
+    --> docker-compose -f docker-compose.admin.yml up -d --build
 
-Een service rebuilden, bv api. Eerst de api container stoppen. Dan builden en herstarten met
-    --> docker compose up -d --no-deps --build api
+Stoppen services
+    --> docker compose down
+
+Een service rebuilden, bv video_api. Eerst de api container stoppen. Dan builden en herstarten met
+    --> docker compose up -d --no-deps --build video_api
+
+

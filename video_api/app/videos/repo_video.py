@@ -1,8 +1,7 @@
 from database import db
 from viewmodels import VideoViewModel
-
 from .schemas import VideoTable
-from .models import BaseResponse, NULL_OBJ
+from .models import Video, BaseResponse, NULL_OBJ
 import traceback
 
 class VideoRepository():
@@ -18,7 +17,7 @@ class VideoRepository():
                 return None
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     @staticmethod
@@ -46,7 +45,7 @@ class VideoRepository():
             
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     @staticmethod
@@ -73,11 +72,11 @@ class VideoRepository():
             
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     @staticmethod
-    def insert(response: BaseResponse, new_item: VideoTable):
+    def insert(response: BaseResponse, new_item: Video):
         try:
             if new_item is None:
                 response.message = NULL_OBJ
@@ -92,11 +91,11 @@ class VideoRepository():
             
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     @staticmethod
-    def update(response: BaseResponse, new_obj):
+    def update(response: BaseResponse, new_obj: Video):
         try:
             if new_obj is None:
                 response.message = NULL_OBJ
@@ -122,7 +121,7 @@ class VideoRepository():
 
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     
@@ -141,9 +140,8 @@ class VideoRepository():
 
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
-
 
     @staticmethod
     def updateAnnotation(response: BaseResponse, id: int, new_annotation: str):
@@ -153,7 +151,6 @@ class VideoRepository():
             if item is not None:  
                 setattr(item, "annotation", new_annotation)
                 db.commit()
-                
                 return VideoViewModel.from_orm(item)
             else:
                 response.message = f"No item found with id '{id}'"
@@ -161,7 +158,7 @@ class VideoRepository():
 
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
 
@@ -178,5 +175,5 @@ class VideoRepository():
         
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()

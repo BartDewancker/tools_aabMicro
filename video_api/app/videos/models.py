@@ -40,3 +40,6 @@ class Library(BaseLibrary):
 class BaseResponse(BaseModel):
     message: str
     error: Optional[str]
+
+class DeleteResponse(BaseModel):
+    message: str

@@ -57,7 +57,7 @@ class ListOfCategories():
 
 @strawberry.type
 class ListOfLibraries():
-    categories: List[LibraryViewModelType]
+    libraries: List[LibraryViewModelType]
 
 VideoReturn = strawberry.union(
     "VideoReturn", [VideoViewModelType, BaseMessage]

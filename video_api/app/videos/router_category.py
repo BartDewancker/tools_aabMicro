@@ -3,7 +3,13 @@ from fastapi import status
 from fastapi import Response, status
 from typing import List
 
-from .repo_category import CategoryRepository
+from nosql_database import MONGO_DATABASE_ON
+
+if MONGO_DATABASE_ON == "ON":
+    from .mdb_repo_category import CategoryRepository
+else:
+    from .repo_category import CategoryRepository
+
 from .models import Category, BaseResponse, NULL_OBJ
 from viewmodels import CategoryViewModel
 
@@ -11,7 +17,7 @@ router = APIRouter()
 repo = CategoryRepository
 
 @router.get("/", tags=["Category"], name="Get all categories",
-                      responses={status.HTTP_200_OK: {"model": List[Category]},
+                      responses={status.HTTP_200_OK: {"model": List[CategoryViewModel]},
                                  status.HTTP_404_NOT_FOUND: {"model": str},
                                  status.HTTP_409_CONFLICT: {"model": str}})
 def get_all(response: Response):

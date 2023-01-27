@@ -12,13 +12,13 @@ class CategoryRepository():
             db_objects = db.query(CategoryTable).all()
             if db_objects:
                 #return [CategoryViewModel.from_orm(obj) for obj in db_objects]
-                return list(map(lambda x: Category.from_orm(x), db_objects))
+                return list(map(lambda x: CategoryViewModel.from_orm(x), db_objects))
             else:
                 response.message = f"No object of type {CategoryTable} were found in the database!"
                 return None        
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     
@@ -35,12 +35,12 @@ class CategoryRepository():
             
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
 
     @staticmethod
-    def insert(response: BaseResponse, new_item: CategoryTable):
+    def insert(response: BaseResponse, new_item: Category):
         try:
             if new_item is None:
                 response.message = NULL_OBJ
@@ -55,12 +55,12 @@ class CategoryRepository():
             
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
     
 
     @staticmethod
-    def update(response: BaseResponse, new_obj):
+    def update(response: BaseResponse, new_obj: Category):
         try:
             if new_obj is None:
                 response.message = NULL_OBJ
@@ -87,7 +87,7 @@ class CategoryRepository():
 
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 
     @staticmethod
@@ -103,6 +103,6 @@ class CategoryRepository():
         
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = str(err)
+            response.error = "Database error! Call the database administrator"
             db.rollback()
 

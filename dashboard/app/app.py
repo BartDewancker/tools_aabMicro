@@ -609,9 +609,16 @@ dbNew.start_db()
 
 def getAllVideos():
     from videos.repo_video import VideoRepository
-    from videos.models import VideoResponse
+    from videos.models import BaseResponse
 
-    res = VideoResponse(message="", error="")
+    from nosql_database import MONGO_DATABASE_ON
+
+    if MONGO_DATABASE_ON == "ON":
+        from videos.mdb_repo_video import VideoRepository
+    else:
+        from videos.repo_video import VideoRepository
+
+    res = BaseResponse(message="", error="")
 
     videos = VideoRepository.get_all(res)
 

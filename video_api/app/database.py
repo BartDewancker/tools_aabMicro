@@ -19,6 +19,8 @@ MYSQL_DATABASE = os.getenv('MYSQL_DATABASE')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
 
 
+
+
 engine = create_engine(
     f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}'
 )

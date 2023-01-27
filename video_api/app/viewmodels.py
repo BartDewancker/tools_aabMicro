@@ -3,8 +3,8 @@ from typing import Optional, List
 from videos.models import Video, Category, Library
 
 class VideoViewModel(Video):
-    category: Category
-    library: Library
+    category: Optional[Category]
+    library: Optional[Library]
 
 class CategoryViewModel(Category):
     videos: Optional[List[Video]]
