@@ -4,20 +4,14 @@ services:
       restart: always #always, no, on-failure, unless-stopped
       env_file:
       - .env
-      ports:
-        - 3306:3306
-      # expose:
-      #   - 3306
+      # ports:
+      #   - 3306:3306
+      expose:
+        - 3306
      
       volumes:
         - rdb:/var/lib/mysql
 
-  adminer:
-      image: adminer
-      restart: always
-      ports:
-      - 8080:8080
-  
   video_api:
     image: araani/video-api:v1.0
     restart: always
@@ -37,22 +31,14 @@ services:
   mongodb:
     image: mongo:6.0 # 6.0 is currently the latest version
     restart: always
-    ports:
-      - 27017:27017
-    # expose:
-    #     - 27017
+    # ports:
+    #   - 27017:27017
+    expose:
+        - 27017
     env_file:
       - .env
     volumes:
       - mongodb:/data/db # Data storage path
-
-  mongo-express:
-    image: mongo-express:1.0.0-alpha.4
-    restart: always
-    ports:
-        - 8081:8081
-    env_file:
-      - .env
 
   dashboard:
     image: araani/aab:v1.0
