@@ -1,4 +1,5 @@
 from utils import get_uuid
+from typing import List
 from nosql_database import (
     get_database
 )
@@ -6,6 +7,7 @@ from nosql_database import (
 from viewmodels import CategoryViewModel
 from .models import Category, BaseResponse, Video, NULL_OBJ
 import traceback
+import json
 
 categories = get_database('categories')
 videos = get_database('videos')
@@ -13,15 +15,20 @@ videos = get_database('videos')
 class CategoryRepository():
     
     @staticmethod
-    def get_all(response: BaseResponse) -> CategoryViewModel:
+    def get_all(response: BaseResponse) -> List[CategoryViewModel]:
         try:
-            db_objects = categories.find()
-            if db_objects is not None:
+            documents = categories.find()
+            if documents is not None:
                 categoryList = []
-                for cat in db_objects:
-                    cat_obj = CategoryViewModel(**cat)
-                    cat_videos = videos.find({'category_id': cat['id']})
-                    cat_obj.videos = [Video(**video) for video in cat_videos]
+                for doc in documents:
+                    
+                    cat_obj = CategoryViewModel(**doc)
+                    cat_videos = videos.find({'category_id': doc['id']})
+
+                    for video in cat_videos:
+                        video['annotation'] = json.dumps(video['annotation'])
+                        cat_obj.videos.append(Video(**video))
+
                     categoryList.append(cat_obj)
                 
                 return categoryList
@@ -30,7 +37,8 @@ class CategoryRepository():
                 return None        
         except Exception as err:
             traceback.print_tb(err.__traceback__)
-            response.error = "Database error! Call the database administrator"
+            response.error = err.__doc__
+            #response.error = "Database error! Call the database administrator"
 
     
     @staticmethod
@@ -39,6 +47,12 @@ class CategoryRepository():
             document = categories.find_one({'id': idGet})
             if document is not None:
                 obj = CategoryViewModel(**document)
+
+                cat_videos = videos.find({'category_id': document['id']})
+                for video in cat_videos:
+                    video['annotation'] = json.dumps(video['annotation'])
+                    obj.videos.append(Video(**video))
+
                 response.message = f"Found item with id '{obj.id}'"
                 return obj
             else:
@@ -59,6 +73,7 @@ class CategoryRepository():
             else:
                 document = new_item.dict()
                 document["_id"] = get_uuid()
+                document["videos"] = []
 
                 all_objects = CategoryRepository.get_all(response)
 

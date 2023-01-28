@@ -4,10 +4,10 @@ services:
       restart: always #always, no, on-failure, unless-stopped
       env_file:
       - .env
-      # ports:
-      #   - 3306:3306
-      expose:
-        - 3306
+      ports:
+        - 3306:3306
+      # expose:
+      #   - 3306
      
       volumes:
         - rdb:/var/lib/mysql
@@ -31,10 +31,10 @@ services:
   mongodb:
     image: mongo:6.0 # 6.0 is currently the latest version
     restart: always
-    # ports:
-    #   - 27017:27017
-    expose:
-        - 27017
+    ports:
+      - 27017:27017
+    # expose:
+    #     - 27017
     env_file:
       - .env
     volumes:
