@@ -26,9 +26,9 @@ schema = strawberry.Schema(query=Query, mutation=Mutation)
 graphql_app = GraphQLRouter(schema)
 
 app = FastAPI(
-    title="FastAPI for 'aad' project",
-    description="'add' contains videos, categories, ...",
-    version="0.0.1",
+    title="API for 'Araani Analytics Benchmarking' project",
+    description="Contains videos metadata and annotations",
+    version="1.0.0",
 )
 
 app.include_router(router_video, prefix="/videos_1")

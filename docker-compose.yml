@@ -4,10 +4,8 @@ services:
       restart: always #always, no, on-failure, unless-stopped
       env_file:
       - .env
-      ports:
-        - 3306:3306
-      # expose:
-      #   - 3306
+      expose:
+        - 3306
      
       volumes:
         - rdb:/var/lib/mysql
@@ -28,18 +26,6 @@ services:
     environment:
         ENVIRONMENT: DOCKER
 
-  mongodb:
-    image: mongo:6.0 # 6.0 is currently the latest version
-    restart: always
-    ports:
-      - 27017:27017
-    # expose:
-    #     - 27017
-    env_file:
-      - .env
-    volumes:
-      - mongodb:/data/db # Data storage path
-
   dashboard:
     image: araani/aab:v1.0
     restart: always
@@ -48,8 +34,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8050:8050
-    expose:
-      - 8050
     volumes:
     - type: bind
       source: D:/VideoLibrary
@@ -61,6 +45,16 @@ services:
       - .env
     environment:
       ENVIRONMENT: DOCKER
+
+  mongodb:
+    image: mongo:6.0 # 6.0 is currently the latest version
+    restart: always
+    expose:
+        - 27017
+    env_file:
+      - .env
+    volumes:
+      - mongodb:/data/db # Data storage path
 
 volumes:
   rdb:

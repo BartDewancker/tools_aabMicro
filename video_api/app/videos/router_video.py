@@ -21,6 +21,9 @@ repo = VideoRepository
                                  status.HTTP_404_NOT_FOUND: {"model": str},
                                  status.HTTP_409_CONFLICT: {"model": str}})
 def get_all(response: Response):
+    """
+    Get all videos with their annotations
+    """
     res = BaseResponse(message="", error="")
 
     items = repo.get_all(res)
@@ -162,7 +165,7 @@ def get_many(category_id: int, response: Response):
                        responses={status.HTTP_200_OK: {"model": VideoViewModel},
                                   status.HTTP_404_NOT_FOUND: {"model": str},
                                   status.HTTP_409_CONFLICT: {"model": str}})
-def update_path(id: int, annotation: str, response: Response):
+def update_annotation(id: int, annotation: str, response: Response):
 
     res = BaseResponse(message="", error="")
     updated_item = repo.updateAnnotation(res, id, annotation)
