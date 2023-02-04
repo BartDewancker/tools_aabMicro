@@ -242,13 +242,19 @@ class VideoRepository():
 
             if document is not None:
 
-                document.update({"category_id": new_ID})
+                cat = categories.find_one({'id': new_ID})
+
+                if cat is not None:
+                    document.update({"category_id": new_ID})
                 
-                result = videos.replace_one({"id": id}, document)
-                if result.matched_count == 1:
-                    return VideoRepository.get_one(response, id=id)
+                    result = videos.replace_one({"id": id}, document)
+                    if result.matched_count == 1:
+                        return VideoRepository.get_one(response, id=id)
+                    else:
+                        response.message = f"No item updated with id '{id}'"
+                        return None
                 else:
-                    response.message = f"No item updated with id '{id}'"
+                    response.message = f"No category found with id '{new_ID}'"
                     return None
             else:
                 response.message = f"No item found with id '{id}'"
