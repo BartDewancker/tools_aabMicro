@@ -26,6 +26,8 @@ class VideoRepository():
                     # Convert in document the annotation field from json format to string.
                     document['annotation'] = json.dumps(document['annotation'])
                     video_obj = VideoViewModel(**document)
+
+                    video_obj.annotation = json.loads(video_obj.annotation)
                     
                     cat = categories.find_one({'id': document['category_id']})
                     if cat:
@@ -64,6 +66,9 @@ class VideoRepository():
                 # Convert in document the annotation field from json format to string.
                 document['annotation'] = json.dumps(document['annotation'])
                 obj = VideoViewModel(**document)
+
+                obj.annotation = json.loads(obj.annotation)
+
                 cat = categories.find_one({'id': document['category_id']})
                 if cat:
                     obj.category = Category(**cat)
@@ -94,6 +99,8 @@ class VideoRepository():
                     # Convert in document the annotation field from json format to string.
                     document['annotation'] = json.dumps(document['annotation'])
                     video_obj = VideoViewModel(**document)
+
+                    video_obj.annotation = json.loads(video_obj.annotation)
                    
                     cat = categories.find_one({'id': document['category_id']})
                     if cat:
@@ -223,6 +230,30 @@ class VideoRepository():
                 response.message = f"No item found with id '{idDel}'"
             return result.deleted_count
         
+        except Exception as err:
+            traceback.print_tb(err.__traceback__)
+            response.error = "Database error! Call the database administrator"
+
+    
+    @staticmethod
+    def updateCategoryID(response: BaseResponse, id: int, new_ID: int) -> VideoViewModel:
+        try:
+            document = videos.find_one({"id": id})
+
+            if document is not None:
+
+                document.update({"category_id": new_ID})
+                
+                result = videos.replace_one({"id": id}, document)
+                if result.matched_count == 1:
+                    return VideoRepository.get_one(response, id=id)
+                else:
+                    response.message = f"No item updated with id '{id}'"
+                    return None
+            else:
+                response.message = f"No item found with id '{id}'"
+                return None
+
         except Exception as err:
             traceback.print_tb(err.__traceback__)
             response.error = "Database error! Call the database administrator"

@@ -122,7 +122,7 @@ class Mutation:
             return updated_item
         else:
             return BaseMessage(message = res.message)
-        
+           
     @strawberry.mutation
     def video_delete(self, id: int = strawberry.UNSET) -> str:
    
@@ -136,6 +136,16 @@ class Mutation:
         else:
             return res.message
         
+    @strawberry.mutation
+    def video_updateCategoryID(self, id: int, category_ID: int) -> VideoReturn:
+   
+        res = BaseResponse(message="", error="")
+        updated_item = repo.updateCategoryID(res, id, category_ID)
+
+        if res.error != "":
+            return  BaseMessage(message = res.error)
+        elif (updated_item is not None):
+            return updated_item
+        else:
+            return BaseMessage(message = res.message)
         
-        
-       
